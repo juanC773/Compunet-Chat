@@ -7,13 +7,15 @@ public class ApplicationServer {
     private static final int SERVER_PORT = 9999;
     private static final Map<String, Socket> users = new HashMap<>();
 
+    private static final Map<String, List<String>> groups = new HashMap<>();
+
+
     public static void main(String[] args) {
         try {
+
+
             ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
             System.out.println("Server started...");
-
-
-
 
 
 
@@ -41,6 +43,10 @@ public class ApplicationServer {
     }
 
 
+
+
+
+
     public static void addUser(String username, Socket socket) {
 
 
@@ -50,9 +56,56 @@ public class ApplicationServer {
     }
 
 
+
     public static  boolean searchUser(String username){
         return users.containsKey(username);
     }
+
+
+
+    public static void addGroup(String groupName, Socket socket) {
+        if (!groups.containsKey(groupName)) {
+            groups.put(groupName, new ArrayList<>());
+            System.out.println("Grupo creado con éxito: " + groupName);
+        } else {
+            System.out.println("El grupo '" + groupName + "' ya existe.");
+        }
+    }
+
+    public static void addUserToGroup(String groupName, String username) {
+        // Verificar si el grupo ya existe
+        if (groups.containsKey(groupName)) {
+            // Obtener la lista de miembros del grupo y agregar el usuario si no está presente
+            List<String> members = groups.get(groupName);
+            if (!members.contains(username)) {
+                members.add(username);
+                System.out.println("Usuario '" + username + "' agregado al grupo '" + groupName + "'.");
+            } else {
+                System.out.println("El usuario '" + username + "' ya está en el grupo '" + groupName + "'.");
+            }
+        } else {
+            System.out.println("El grupo '" + groupName + "' no existe.");
+        }
+    }
+
+
+
+
+    public static boolean searchGroup(String id) {
+        return groups.containsKey(id);
+    }
+
+
+
+    public static List<String> getGroupMembers(String groupName) {
+        return groups.getOrDefault(groupName, new ArrayList<>());
+    }
+
+
+
+
+
+
 
 
 
